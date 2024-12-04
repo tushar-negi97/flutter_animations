@@ -1,4 +1,4 @@
-# bloc_app
+# Flutter Animations
 
 A new Flutter project.
 

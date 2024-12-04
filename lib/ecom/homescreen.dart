@@ -21,16 +21,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     setState(() {
       cartItemCount = cartItems.length;
     });
-    print('Hoiiiii  _incrementCartItemCount=== > $cartItemCount');
   }
 
   void _decrementCartItemCount(CartItem item) {
-    print(item.id);
-    cartItems.removeAt(cartItems.firstWhere((test) => test.id == item.id).id);
+    if (cartItems.any((test) => test.id == item.id)) {
+      cartItems.removeAt(cartItems.firstWhere((test) => test.id == item.id).id);
+    }
     setState(() {
       cartItemCount = cartItems.length;
     });
-    print('Hoiiiii  _decrementCartItemCount=== > $cartItemCount');
   }
 
   @override
@@ -63,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
-        backgroundColor: Colors.deepPurple,
+        // backgroundColor: Colors.deepPurple,
         actions: [
           Stack(
             alignment: Alignment.center,
@@ -238,32 +237,32 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        selectedItemColor: Colors.deepPurple,
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.local_offer),
-            label: 'Offers',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Cart',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        onTap: (index) {
-          // Handle navigation
-        },
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   currentIndex: 0,
+      //   selectedItemColor: Colors.deepPurple,
+      //   unselectedItemColor: Colors.grey,
+      //   items: const [
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home),
+      //       label: 'Home',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.local_offer),
+      //       label: 'Offers',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.shopping_cart),
+      //       label: 'Cart',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.person),
+      //       label: 'Profile',
+      //     ),
+      //   ],
+      //   onTap: (index) {
+      //     // Handle navigation
+      //   },
+      // ),
     );
   }
 

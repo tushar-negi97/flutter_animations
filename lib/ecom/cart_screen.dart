@@ -80,18 +80,19 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
       body: cartItems.isEmpty
           ? Column(
               children: [
-                Spacer(),
+                const Spacer(),
                 Lottie.asset('assets/lottie/Animation6.json'),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.popAndPushNamed(context, '/homeScreen');
-                    },
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
-                    child: const Text(
-                      'Shop Now',
-                      style: TextStyle(color: Colors.white),
-                    )),
-                Spacer(flex: 3),
+                // ElevatedButton(
+                //     onPressed: () {
+                //       Navigator.popAndPushNamed(context, '/navigationHome');
+                //     },
+                //     style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
+                //     child: const Text(
+                //       'Shop Now',
+                //       style: TextStyle(color: Colors.white),
+                //     )),
+                const Text('No Products in Cart'),
+                const Spacer(flex: 3),
               ],
             )
           : AnimatedList(

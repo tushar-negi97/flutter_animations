@@ -77,7 +77,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> with Ticker
     return Scaffold(
       appBar: AppBar(
         title: const Text('Product Details'),
-        backgroundColor: Colors.deepPurple,
+        // backgroundColor: Colors.deepPurple,
       ),
       body: SingleChildScrollView(
         child: Column(

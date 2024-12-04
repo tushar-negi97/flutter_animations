@@ -57,13 +57,10 @@ class _ProductCardState extends State<ProductCard> with TickerProviderStateMixin
 
   void _toggleCart() {
     if (_isAddedToCart) {
-      print('_isAddedToCart');
       widget.onCartUnPressed();
 
       _controller.reverse();
     } else {
-      print('_isAddedToCart2');
-
       _controller.forward();
       widget.onCartPressed();
     }

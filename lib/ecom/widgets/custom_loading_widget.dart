@@ -20,7 +20,7 @@ class OrderSuccessWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       scrollable: true,
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       content: SizedBox(
         height: 310,
         child: Stack(
@@ -37,7 +37,7 @@ class OrderSuccessWidget extends StatelessWidget {
               child: ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
-                    Navigator.popAndPushNamed(context, '/homeScreen');
+                    Navigator.popAndPushNamed(context, '/navigationHome');
                   },
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
                   child: const Text(

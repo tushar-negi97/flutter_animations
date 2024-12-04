@@ -131,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
     CommonMethods.getLoadingIndicator(context);
 
     // Simulate an API call delay for login
-    await Future.delayed(const Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 3));
     Navigator.pop(context);
 
     if (_passwordController.text == '12345') {
@@ -140,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
         _isLoading = false;
       });
 
-      Navigator.popAndPushNamed(context, '/homeScreen');
+      Navigator.popAndPushNamed(context, '/navigationHome');
     } else {
       _showSnackBar('Invalid login credentials. Please try again.', Colors.red);
       setState(() {
