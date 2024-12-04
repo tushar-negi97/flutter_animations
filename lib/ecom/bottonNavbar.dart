@@ -24,8 +24,6 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
     const HomeScreen(),
     const SearchScreen(),
     const NotificationScreen(),
-    // const Text('Home Page', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
-    //Text('Profile Page', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
     ProfileScreen()
   ];
   final List<RiveAsset> _navigationItemsLight = [
@@ -51,13 +49,11 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: Obx(() {
-        // _navigationItems.clear();
         _navigationItems = controller.isDarkMode.value ? _navigationItemsLight : _navigationItemsDark;
-        //  _navigationItems[_selectedIndex].setActive(false);
 
         return BottomNavigationBar(
+          elevation: 4,
           iconSize: 15,
-          // fixedColor: Colors.purple,
           unselectedFontSize: 0,
           selectedFontSize: 0,
           currentIndex: _selectedIndex,

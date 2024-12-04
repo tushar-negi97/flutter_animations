@@ -94,7 +94,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           style: const TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.bold,
-                            color: Colors.blueAccent,
+                            color: Colors.deepPurple,
                           ),
                           textAlign: TextAlign.start,
                         ),
@@ -135,7 +135,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: IconButton(
                 onPressed: _goToPreviousPage,
                 icon: const Icon(Icons.arrow_back_ios, size: 28),
-                color: Colors.blueAccent,
+                color: Colors.deepPurple,
               ),
             ),
           Positioned(
@@ -147,7 +147,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 _currentIndex == _onboardingData.length - 1 ? Icons.check : Icons.arrow_forward_ios,
                 size: 28,
               ),
-              color: Colors.blueAccent,
+              color: Colors.deepPurple,
             ),
           ),
         ],

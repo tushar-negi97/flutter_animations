@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:bloc_app/ecom/widgets/custom_loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -112,7 +114,7 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
             ),
       bottomNavigationBar: cartItems.isNotEmpty
           ? Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
                 onPressed: () async {

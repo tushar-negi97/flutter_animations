@@ -8,7 +8,7 @@ ThemeData lightTheme = ThemeData(
   appBarTheme: const AppBarTheme(
       backgroundColor: Colors.white,
       foregroundColor: Colors.white,
-      elevation: 3,
+      elevation: 2,
       titleTextStyle: TextStyle(
         color: Colors.black,
         fontSize: 20,
@@ -54,12 +54,12 @@ ThemeData darkTheme = ThemeData(
   useMaterial3: true,
   brightness: Brightness.dark,
   primaryColor: Colors.deepPurpleAccent,
-  
+
   scaffoldBackgroundColor: Colors.black,
   appBarTheme: const AppBarTheme(
       backgroundColor: Colors.black,
       foregroundColor: Colors.white,
-      elevation: 3,
+      elevation: 2,
       titleTextStyle: TextStyle(
         color: Colors.white,
         fontSize: 20,
