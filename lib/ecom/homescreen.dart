@@ -1,4 +1,5 @@
 import 'package:bloc_app/ecom/cart_screen.dart';
+import 'package:bloc_app/ecom/data.dart';
 import 'package:bloc_app/ecom/product_detail_Screen.dart';
 import 'package:bloc_app/ecom/widgets/animated_cart_widget.dart';
 import 'package:bloc_app/ecom/widgets/animated_dialog.dart';
@@ -34,7 +35,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   void _decrementCartItemCount(CartItem item) {
     if (cartItems.any((test) => test.id == item.id)) {
-      cartItems.removeAt(cartItems.firstWhere((test) => test.id == item.id).id);
+      var index = cartItems.indexOf(cartItems.firstWhere((test) => test.id == item.id));
+      cartItems.removeAt(index);
     }
     setState(() {
       cartItemCount = cartItems.length;
@@ -82,21 +84,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  void _toggleCart(int index) {
-    if (_isAddedToCart) {
-      _decrementCartItemCount(
-          CartItem(id: index, name: "Product $index", price: double.parse("${(index + 1) * 10}"), quantity: 1));
+  // void _toggleCart(int index) {
+  //   if (_isAddedToCart) {
+  //     _decrementCartItemCount(
+  //         CartItem(id: index, name: "Product $index", price: double.parse("${(index + 1) * 10}"), quantity: 1));
 
-      _controller.reverse();
-    } else {
-      _controller.forward();
-      _incrementCartItemCount(
-          CartItem(id: index, name: "Product $index", price: double.parse("${(index + 1) * 10}"), quantity: 1));
-    }
-    setState(() {
-      _isAddedToCart = !_isAddedToCart;
-    });
-  }
+  //     _controller.reverse();
+  //   } else {
+  //     _controller.forward();
+  //     _incrementCartItemCount(
+  //         CartItem(id: index, name: "Product $index", price: double.parse("${(index + 1) * 10}"), quantity: 1));
+  //   }
+  //   setState(() {
+  //     _isAddedToCart = !_isAddedToCart;
+  //   });
+  // }
 
   void _showProductDialog(
       BuildContext context, int index, String image, String name, String price, String description) {
@@ -343,35 +345,38 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               mainAxisSpacing: 5,
                               childAspectRatio: 0.8,
                             ),
-                            itemCount: 10, // Replace with your product count
+                            itemCount: MyData.productsData.length, // Replace with your product count
                             itemBuilder: (context, index) {
                               return InkWell(
                                 onLongPress: () {
                                   _showProductDialog(
-                                      context,
-                                      index,
-                                      "https://www.itel-india.com/wp-content/uploads/2024/01/12-min-450x450.jpg",
-                                      'Product $index',
-                                      "\$${(index + 1) * 10}",
-                                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
+                                    context,
+                                    index,
+                                    MyData.productsData[index].image,
+                                    MyData.productsData[index].name,
+                                    MyData.productsData[index].price,
+                                    MyData.productsData[index].description,
+                                  );
                                 },
                                 child: ProductCard(
                                   key: ValueKey(refreshCart),
-                                  name: "Product $index",
-                                  price: "\$${(index + 1) * 10}",
-                                  image: "https://www.itel-india.com/wp-content/uploads/2024/01/12-min-450x450.jpg",
+                                  name: MyData.productsData[index].name,
+                                  price: MyData.productsData[index].price,
+                                  image: MyData.productsData[index].image,
                                   onCartUnPressed: () {
                                     _decrementCartItemCount(CartItem(
-                                        id: index,
-                                        name: "Product $index",
-                                        price: double.parse("${(index + 1) * 10}"),
+                                        id: MyData.productsData[index].id,
+                                        name: MyData.productsData[index].name,
+                                        price: double.parse(MyData.productsData[index].price),
+                                        image: MyData.productsData[index].image,
                                         quantity: 1));
                                   },
                                   onCartPressed: () {
                                     _incrementCartItemCount(CartItem(
-                                        id: index,
-                                        name: "Product $index",
-                                        price: double.parse("${(index + 1) * 10}"),
+                                        id: MyData.productsData[index].id,
+                                        name: MyData.productsData[index].name,
+                                        price: double.parse(MyData.productsData[index].price),
+                                        image: MyData.productsData[index].image,
                                         quantity: 1));
                                   },
                                 ),
@@ -384,12 +389,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               return ListTile(
                                 onLongPress: () {
                                   _showProductDialog(
-                                      context,
-                                      index,
-                                      "https://www.itel-india.com/wp-content/uploads/2024/01/12-min-450x450.jpg",
-                                      'Product $index',
-                                      "\$${(index + 1) * 10}",
-                                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
+                                    context,
+                                    index,
+                                    MyData.productsData[index].image,
+                                    MyData.productsData[index].name,
+                                    MyData.productsData[index].price,
+                                    MyData.productsData[index].description,
+                                  );
                                 },
                                 // minLeadingWidth: 150,
                                 onTap: () {
@@ -397,12 +403,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ProductDetailsScreen(
-                                        name: 'Product $index',
-                                        price: "\$${(index + 1) * 10}",
-                                        image:
-                                            "https://www.itel-india.com/wp-content/uploads/2024/01/12-min-450x450.jpg",
-                                        description:
-                                            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                                        name: MyData.productsData[index].name,
+                                        price: MyData.productsData[index].price,
+                                        image: MyData.productsData[index].image,
+                                        description: MyData.productsData[index].description,
                                         productId: 'Product $index',
                                       ),
                                     ),
@@ -416,15 +420,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     tag: 'product-${"Product $index"}', // Unique tag for Hero animation
                                     child: ClipRRect(
                                       borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
-                                      child: Image.network(
-                                        "https://www.itel-india.com/wp-content/uploads/2024/01/12-min-450x450.jpg",
+                                      child: Image.asset(
+                                        MyData.productsData[index].image,
                                         fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),
                                 ),
-                                title: Text("Product $index"),
-                                subtitle: Text('Price:${"\$${(index + 1) * 10}"}'),
+                                title: Text(MyData.productsData[index].name),
+                                subtitle: Text('Price:${"\$${MyData.productsData[index].image}"}'),
                                 //  trailing:
                                 // Padding(
                                 //   padding: const EdgeInsets.all(8.0),

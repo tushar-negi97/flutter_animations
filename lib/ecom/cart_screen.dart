@@ -4,10 +4,6 @@ import 'package:bloc_app/ecom/widgets/custom_loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-void main() {
-  runApp(const MaterialApp(home: CartScreen()));
-}
-
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
 
@@ -16,12 +12,7 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
-  List<CartItem> cartItems = [
-    // CartItem(id: 0, name: "Product 1", price: 20.0, quantity: 1),
-    // CartItem(id: 1, name: "Product 2", price: 30.0, quantity: 1),
-    // CartItem(id: 2, name: "Product 3", price: 40.0, quantity: 1),
-    // CartItem(id: 3, name: "Product 5", price: 40.0, quantity: 1),
-  ];
+  List<CartItem> cartItems = [];
 
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
@@ -146,8 +137,8 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.network(
-                "https://www.itel-india.com/wp-content/uploads/2024/01/12-min-450x450.jpg",
+              child: Image.asset(
+                item.image,
                 height: 80,
                 width: 80,
                 fit: BoxFit.cover,
@@ -184,9 +175,10 @@ class _CartScreenState extends State<CartScreen> with TickerProviderStateMixin {
 
 class CartItem {
   final String name;
-  final int id;
+  final String id;
   final double price;
   final int quantity;
+  final String image;
 
-  CartItem({required this.name, required this.id, required this.price, required this.quantity});
+  CartItem({required this.name, required this.id, required this.price, required this.image, required this.quantity});
 }

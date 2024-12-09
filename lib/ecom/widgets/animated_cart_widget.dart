@@ -91,7 +91,7 @@ class _ProductCardState extends State<ProductCard> with TickerProviderStateMixin
                 tag: 'product-${widget.name}', // Unique tag for Hero animation
                 child: ClipRRect(
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
-                  child: Image.network(
+                  child: Image.asset(
                     widget.image,
                     fit: BoxFit.cover,
                   ),

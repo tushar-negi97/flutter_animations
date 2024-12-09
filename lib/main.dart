@@ -289,7 +289,7 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       initialRoute: '/',
       routes: {
-        '/': (context) => SplashScreen(),
+        '/': (context) => BottomNavigationScreen(),
         '/onboarding': (context) => OnboardingScreen(),
         '/login': (context) => const LoginScreen(),
         '/homeScreen': (context) => const HomeScreen(),

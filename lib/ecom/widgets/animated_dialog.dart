@@ -77,7 +77,7 @@ class _AnimatedDialogState extends State<AnimatedDialog> with SingleTickerProvid
                 borderRadius: BorderRadius.circular(15),
                 child: Hero(
                     tag: 'product-${"Product ${widget.index}"}',
-                    child: Image.network(widget.image, height: 150, fit: BoxFit.cover)),
+                    child: Image.asset(widget.image, height: 150, fit: BoxFit.cover)),
               ),
               const SizedBox(height: 10),
               Text(
