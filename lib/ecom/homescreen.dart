@@ -428,7 +428,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                   ),
                                 ),
                                 title: Text(MyData.productsData[index].name),
-                                subtitle: Text('Price:${"\$${MyData.productsData[index].image}"}'),
+                                subtitle: Text('Price:${"\$${MyData.productsData[index].price}"}'),
                                 //  trailing:
                                 // Padding(
                                 //   padding: const EdgeInsets.all(8.0),
