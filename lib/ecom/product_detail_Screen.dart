@@ -109,13 +109,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> with Ticker
             // Hero Animation for Product Image
             Hero(
               tag: 'product-${widget.productId}', // Unique tag for Hero animation
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  widget.image,
-                  height: 250,
-                  width: double.infinity,
-                  fit: BoxFit.contain,
+              child: InteractiveViewer(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    widget.image,
+                    height: 250,
+                    width: double.infinity,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
             ),

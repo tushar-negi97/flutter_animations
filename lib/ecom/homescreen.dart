@@ -1,5 +1,7 @@
 import 'package:bloc_app/ecom/cart_screen.dart';
+import 'package:bloc_app/ecom/product_detail_Screen.dart';
 import 'package:bloc_app/ecom/widgets/animated_cart_widget.dart';
+import 'package:bloc_app/ecom/widgets/animated_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -13,9 +15,16 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late AnimationController _categoryController;
   late AnimationController _productController;
+  late AnimationController _productListController;
+
   List<CartItem> cartItems = [];
   int cartItemCount = 0;
   bool refreshCart = false;
+  bool isGrid = true;
+  late AnimationController _controller;
+  late Animation<double> _rotationAnimation;
+  bool _isAddedToCart = false;
+
   void _incrementCartItemCount(CartItem item) {
     cartItems.add(item);
     setState(() {
@@ -42,19 +51,74 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
     _productController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1300),
+      duration: const Duration(milliseconds: 1000),
     );
 
+    _productListController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
     // Start animations
     _categoryController.forward();
     _productController.forward();
+    _productListController.forward();
+
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+
+    _rotationAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
   }
 
   @override
   void dispose() {
     _categoryController.dispose();
     _productController.dispose();
+    _productListController.dispose();
+    _controller.dispose();
     super.dispose();
+  }
+
+  void _toggleCart(int index) {
+    if (_isAddedToCart) {
+      _decrementCartItemCount(
+          CartItem(id: index, name: "Product $index", price: double.parse("${(index + 1) * 10}"), quantity: 1));
+
+      _controller.reverse();
+    } else {
+      _controller.forward();
+      _incrementCartItemCount(
+          CartItem(id: index, name: "Product $index", price: double.parse("${(index + 1) * 10}"), quantity: 1));
+    }
+    setState(() {
+      _isAddedToCart = !_isAddedToCart;
+    });
+  }
+
+  void _showProductDialog(
+      BuildContext context, int index, String image, String name, String price, String description) {
+    showDialog(
+      context: context,
+      barrierDismissible: true, // Dismiss on tap outside
+      builder: (BuildContext context) {
+        return Center(
+          child: AnimatedDialog(
+            image: image,
+            name: name,
+            index: index,
+            price: price,
+            description: description,
+            onAddToCart: () {
+              Navigator.pop(context); // Close the dialog
+              // Add product to cart logic here
+            },
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -127,6 +191,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ],
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           // Carousel Section
           Padding(
@@ -144,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ),
               ],
               options: CarouselOptions(
-                height: 180,
+                height: 150,
                 autoPlay: true,
                 enlargeCenterPage: true,
                 aspectRatio: 16 / 9,
@@ -186,50 +251,214 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ),
           ),
 
-          // Products Section
-          Expanded(
-            child: AnimatedBuilder(
-              animation: _productController,
+          AnimatedBuilder(
+              animation: _categoryController,
               builder: (context, child) {
                 return FadeTransition(
-                  opacity: _productController,
+                  opacity: _categoryController,
                   child: SlideTransition(
                     position: Tween<Offset>(
                       begin: const Offset(0, 0.5),
                       end: Offset.zero,
-                    ).animate(_productController),
-                    child: GridView.builder(
-                      padding: const EdgeInsets.all(10),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        childAspectRatio: 0.7,
+                    ).animate(_categoryController),
+                    child: Container(
+                      width: 100,
+                      height: 45,
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                      alignment: Alignment.centerRight,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black12), borderRadius: BorderRadius.circular(20)),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          AnimatedSwitcher(
+                            duration: const Duration(seconds: 1),
+                            switchInCurve: Curves.easeIn,
+                            switchOutCurve: Curves.easeOut,
+                            child: IconButton(
+                                key: ValueKey(isGrid ? 'gridOn' : 'gridOff'),
+                                onPressed: () {
+                                  setState(() {
+                                    isGrid = true;
+                                  });
+                                  // _categoryController.animateBack(1);
+                                  _productController.reset();
+                                  _productController.forward();
+                                },
+                                splashRadius: 1,
+                                style: IconButton.styleFrom(backgroundColor: isGrid ? Colors.deepPurple : Colors.white),
+                                icon: Icon(
+                                  Icons.grid_on_rounded,
+                                  // size: 18,
+                                  color: isGrid ? Colors.white : Colors.black,
+                                )),
+                          ),
+                          AnimatedSwitcher(
+                            duration: const Duration(seconds: 1),
+                            switchInCurve: Curves.easeIn,
+                            switchOutCurve: Curves.easeOut,
+                            child: IconButton(
+                                key: ValueKey(isGrid ? 'listOff' : 'listOn'),
+                                onPressed: () {
+                                  setState(() {
+                                    isGrid = false;
+                                  });
+                                  _productListController.reset();
+                                  _productListController.forward();
+                                },
+                                splashRadius: 1,
+                                style: IconButton.styleFrom(backgroundColor: isGrid ? Colors.white : Colors.deepPurple),
+                                icon: Icon(
+                                  Icons.list_alt_rounded,
+                                  color: isGrid ? Colors.black : Colors.white,
+                                )),
+                          )
+                        ],
                       ),
-                      itemCount: 10, // Replace with your product count
-                      itemBuilder: (context, index) {
-                        return ProductCard(
-                          key: ValueKey(refreshCart),
-                          name: "Product $index",
-                          price: "\$${(index + 1) * 10}",
-                          image: "https://www.itel-india.com/wp-content/uploads/2024/01/12-min-450x450.jpg",
-                          onCartUnPressed: () {
-                            _decrementCartItemCount(CartItem(
-                                id: index,
-                                name: "Product $index",
-                                price: double.parse("${(index + 1) * 10}"),
-                                quantity: 1));
-                          },
-                          onCartPressed: () {
-                            _incrementCartItemCount(CartItem(
-                                id: index,
-                                name: "Product $index",
-                                price: double.parse("${(index + 1) * 10}"),
-                                quantity: 1));
-                          },
-                        );
-                      },
                     ),
+                  ),
+                );
+              }),
+          // Products Section
+
+          Expanded(
+            key: ValueKey(isGrid),
+            child: AnimatedBuilder(
+              animation: isGrid ? _productController : _productListController,
+              builder: (context, child) {
+                return FadeTransition(
+                  opacity: isGrid ? _productController : _productListController,
+                  child: SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0, 0.5),
+                      end: Offset.zero,
+                    ).animate(isGrid ? _productController : _productListController),
+                    child: (isGrid)
+                        ? GridView.builder(
+                            padding: const EdgeInsets.all(10),
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 5,
+                              mainAxisSpacing: 5,
+                              childAspectRatio: 0.8,
+                            ),
+                            itemCount: 10, // Replace with your product count
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onLongPress: () {
+                                  _showProductDialog(
+                                      context,
+                                      index,
+                                      "https://www.itel-india.com/wp-content/uploads/2024/01/12-min-450x450.jpg",
+                                      'Product $index',
+                                      "\$${(index + 1) * 10}",
+                                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
+                                },
+                                child: ProductCard(
+                                  key: ValueKey(refreshCart),
+                                  name: "Product $index",
+                                  price: "\$${(index + 1) * 10}",
+                                  image: "https://www.itel-india.com/wp-content/uploads/2024/01/12-min-450x450.jpg",
+                                  onCartUnPressed: () {
+                                    _decrementCartItemCount(CartItem(
+                                        id: index,
+                                        name: "Product $index",
+                                        price: double.parse("${(index + 1) * 10}"),
+                                        quantity: 1));
+                                  },
+                                  onCartPressed: () {
+                                    _incrementCartItemCount(CartItem(
+                                        id: index,
+                                        name: "Product $index",
+                                        price: double.parse("${(index + 1) * 10}"),
+                                        quantity: 1));
+                                  },
+                                ),
+                              );
+                            },
+                          )
+                        : ListView.builder(
+                            itemCount: 10,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                onLongPress: () {
+                                  _showProductDialog(
+                                      context,
+                                      index,
+                                      "https://www.itel-india.com/wp-content/uploads/2024/01/12-min-450x450.jpg",
+                                      'Product $index',
+                                      "\$${(index + 1) * 10}",
+                                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
+                                },
+                                // minLeadingWidth: 150,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProductDetailsScreen(
+                                        name: 'Product $index',
+                                        price: "\$${(index + 1) * 10}",
+                                        image:
+                                            "https://www.itel-india.com/wp-content/uploads/2024/01/12-min-450x450.jpg",
+                                        description:
+                                            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                                        productId: 'Product $index',
+                                      ),
+                                    ),
+                                  );
+                                },
+                                contentPadding: const EdgeInsets.all(10),
+                                leading: SizedBox(
+                                  width: 100,
+                                  height: 100,
+                                  child: Hero(
+                                    tag: 'product-${"Product $index"}', // Unique tag for Hero animation
+                                    child: ClipRRect(
+                                      borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+                                      child: Image.network(
+                                        "https://www.itel-india.com/wp-content/uploads/2024/01/12-min-450x450.jpg",
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                title: Text("Product $index"),
+                                subtitle: Text('Price:${"\$${(index + 1) * 10}"}'),
+                                //  trailing:
+                                // Padding(
+                                //   padding: const EdgeInsets.all(8.0),
+                                //   child: GestureDetector(
+                                //     onTap: () {
+                                //       _toggleCart(index);
+                                //     },
+                                //     child: AnimatedBuilder(
+                                //       animation: _rotationAnimation,
+                                //       builder: (context, child) {
+                                //         final angle = _rotationAnimation.value * 3.14159; // Convert to radians
+                                //         return Transform(
+                                //           alignment: Alignment.center,
+                                //           transform: Matrix4.identity()
+                                //             ..setEntry(3, 2, 0.001) // Perspective effect
+                                //             ..rotateY(angle),
+                                //           child: _rotationAnimation.value > 0.5
+                                //               ? const Icon(
+                                //                   Icons.shopping_cart,
+                                //                   color: Colors.deepPurple,
+                                //                   key: ValueKey('added'),
+                                //                 )
+                                //               : const Icon(
+                                //                   Icons.shopping_cart_outlined,
+                                //                   color: Colors.grey,
+                                //                   key: ValueKey('notAdded'),
+                                //                 ),
+                                //         );
+                                //       },
+                                //     ),
+                                //   ),
+                                // ),
+                              );
+                            }),
                   ),
                 );
               },
